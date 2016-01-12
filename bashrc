@@ -78,22 +78,26 @@ LESS_PATH=$(which less)
 if [ $? -eq 0 ]; then
   export PAGER=$LESS_PATH
 fi
-export LS_COLORS="no=00:\
-fi=00:\
-di=01;36:\
-ln=01;36:\
-pi=40;33:\
-so=01;35:\
-do=01;35:\
-bd=40;33;01:\
-cd=40;33;01:\
-or=40;31;01:\
-ex=01;32:\
-*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:\
-*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:\
-*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:\
-*.ogg=01;35:*.mp3=01;35:*.wav=01;35:\
-";
+
+# export LS_COLORS="no=00:\
+# fi=00:\
+# di=01;36:\
+# ln=01;36:\
+# pi=40;33:\
+# so=01;35:\
+# do=01;35:\
+# bd=40;33;01:\
+# cd=40;33;01:\
+# or=40;31;01:\
+# ex=01;32:\
+# *.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:\
+# *.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:\
+# *.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:\
+# *.ogg=01;35:*.mp3=01;35:*.wav=01;35:\
+# ";
+
+source "$HOME/.bash/config/ls_colors"
+
 export GREP_OPTIONS='--color=auto'
 export GIT_CEILING_DIRECTORIES
 GIT_CEILING_DIRECTORIES=$(echo $HOME | sed 's#/[^/]*$##')  # Either /home(linux) or /Users(mac)
@@ -317,31 +321,12 @@ source "$HOME/.bash/config/git-completion.bash"
 source "$HOME/.bash/config/git-prompt.sh"
 
 ###### PROMPT ######
-# Set up the prompt colors
-source "$HOME/.bash/term_colors"
-PROMPT_COLOR=$G
-if [ ${UID} -eq 0 ]; then
-  PROMPT_COLOR=$R ### root is a red color prompt
-fi
 
-# I like this prompt for a few reasons:
-# (1) The time shows when each command was executed, when I get back to my terminal
-# (2) Git information really important for git users
-# (3) Prompt color is red if I'm root
-# (4) The last part of the prompt can copy/paste directly into an SCP command
-# (5) Color highlight out the current directory because it's important
-# (6) The export PS1 is simple to understand!
-# (7) If the prev command error codes, the prompt '>' turns red
-export PS1="$Y\t$N $W"'$(__git_ps1 "(%s) ")'"$N$PROMPT_COLOR\u@\H$N:$C\w$N\n"'$CURSOR_PROMPT '
-# TODO: Find out why my $R and $N shortcuts don't work here!!!
-export PROMPT_COMMAND='if [ $? -ne 0 ]; then CURSOR_PROMPT=`bad_prompt`; else CURSOR_PROMPT="<"; fi;'
-
-function bad_prompt(){
-#  red='\033[0;31m'
-#  NC='\033[0m' # No Color
-#  echo -e "${red}>${NC}"
-  echo -e ">"
+function prompt_command() {
+  # send in LAST_ERR explicitly as we're invoking a subshell where $? won't be the same value
+  export PS1=$(LAST_ERR=$? $HOME/.bash/config/build_prompt)
 }
+export PROMPT_COMMAND=prompt_command
 
 #### Source group
 GROUP_FILE="$HOME/.bash/group/group.bash"

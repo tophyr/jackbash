@@ -1,3 +1,4 @@
+#!/bin/bash
 # Basic aliases for bash terminal colors
 
 N="\[\033[0m\]"    # unsets color to term's fg color
@@ -32,3 +33,23 @@ BGM="\[\033[45m\]"
 BGC="\[\033[46m\]"
 BGW="\[\033[47m\]"
 
+# takes: $1 - color
+#		 $2 - text to wrap
+function wrap_color() {
+	if [ "$1" == "-n" ]
+	then
+		echo_newline=
+		shift
+	else
+		echo_newline=1
+	fi
+
+	echo -n "$1"
+	echo -n "$2"
+	echo -n "$N"
+
+	if [ $echo_newline ]
+	then
+		echo
+	fi
+}

@@ -1,0 +1,235 @@
+#!/bin/bash
+
+default=0
+bold=1
+underlined=4
+flashing=5
+reverse=7
+
+red=31				# red
+lt_red=91			# bright red
+orange=33			# brown -- not great, looks darker yellow
+yellow=93			# bright brown (yellow)
+green=32			# green
+lt_green=92			# bright green
+blue=34				# blue
+lt_blue=94			# bright blue
+turquoise=96		# cyan -- not great, looks darker cyan
+cyan=36				# bright cyan
+purple=35			# magenta
+lt_purple=95		# bright magenta
+grey=37				# light grey
+dk_grey=90			# bright black (dk grey)
+
+					# white?
+
+black_bg=40
+red_bg=41
+lt_red_bg=101
+orange_bg=43
+yellow_bg=103
+green_bg=42
+lt_green_bg=102
+blue_bg=44
+lt_blue_bg=104
+cyan_bg=46
+turquoise_bg=106
+purple_bg=45
+lt_purple_bg=105
+grey_bg=47
+dk_grey_bg=100
+
+				NORMAL="$default"
+				  FILE="$default"
+				   DIR="$turquoise"
+			   SYMLINK="$purple"
+				  PIPE="$reverse;$yellow"
+				SOCKET="$reverse;$purple"
+			  BLOCKDEV="$orange"
+			   CHARDEV="$yellow"
+  	  DANGLING_SYMLINK="$red"
+				SETUID="$lt_green;$red_bg"
+				SETGID="$green;$red_bg"
+ STICKY_OTHER_WRITABLE="$reverse;$turquoise"
+		OTHER_WRITABLE="$turquoise;$blue_bg"
+				STICKY="$reverse;$turquoise"
+			EXECUTABLE="$green"
+MISSING_SYMLINK_TARGET=""
+				  DOOR=""
+			  LEFTCODE=""
+			 RIGHTCODE=""
+			   ENDCODE=""
+
+export LS_COLORS="\
+no=$NORMAL:\
+fi=$FILE:\
+di=$DIR:\
+ln=$SYMLINK:\
+pi=$PIPE:\
+do=$DOOR:\
+bd=$BLOCKDEV:\
+cd=$CHARDEV:\
+or=$DANGLING_SYMLINK:\
+so=$SOCKET:\
+su=$SETUID:\
+sg=$SETGID:\
+tw=$STICKY_OTHER_WRITABLE:\
+ow=$OTHER_WRITABLE:\
+st=$STICKY:\
+ex=$EXECUTABLE:\
+mi=$MISSING_SYMLINK_TARGET:\
+lc=$LEFTCODE:\
+rc=$RIGHTCODE:\
+ec=$ENDCODE:\
+"
+
+function test_lscolors() {
+	mkdir -p ~/.tmp_test_colors 
+	pushd ~/.tmp_test_colors
+
+	touch regular_file
+	mkdir regular_dir
+	ln -s regular_file symlink
+	mkfifo named_pipe
+	sudo mknod block_device b 0 0
+	sudo mknod char_device c 0 0
+	ln -s missing_symlink_target dangling_symlink
+	nc -lU socket &
+	kill -9 $!
+	touch setuid_executable
+	chmod +x setuid_executable
+	chmod u+s setuid_executable
+	touch setgid_executable
+	chmod +x setgid_executable
+	chmod g+s setgid_executable
+	mkdir sticky_other_writable_dir
+	chmod 1777 sticky_other_writable_dir
+	mkdir other_writable_dir
+	chmod 0777 other_writable_dir
+	mkdir sticky_dir
+	chmod 1755 sticky_dir
+	touch executable
+	chmod +x executable
+
+	sudo chown $(id -u):$(id -g) *
+
+	ls -l
+	cd ..
+	popd
+	rm -rf ~/.tmp_test_colors
+}
+
+function _convert_linux_to_bsd_color() {
+	fgcolor=x
+	bgcolor=x
+	reverse_color=
+	while (( $# )); do
+		case "$1" in
+			"$bold"|"$underlined"|"$flashing")
+				;;
+			"$reverse")
+				reverse_color=true
+				;;
+			"$red")
+				fgcolor="b"
+				;;
+			"$red_bg"|"$lt_red_bg")
+				bgcolor="b"
+				;;
+			"$lt_red")
+				fgcolor="B"
+				;;
+			"$green")
+				fgcolor="c"
+				;;
+			"$green_bg"|"$lt_green_bg")
+				bgcolor="c"
+				;;
+			"$lt_green")
+				fgcolor="C"
+				;;
+			"$orange")
+				fgcolor="d" 		# kinda sucks, this is more dark yellow
+				;;
+			"$orange_bg"|"$yellow_bg")
+				bgcolor="d"
+				;;
+			"$yellow")
+				fgcolor="D"
+				;;
+			"$blue")
+				fgcolor="e"
+				;;
+			"$blue_bg"|"$lt_blue_bg")
+				bgcolor="e"
+				;;
+			"$lt_blue")
+				fgcolor="E"
+				;;
+			"$turquoise")
+				fgcolor="g"
+				;;
+			"$turquoise_bg"|"$cyan_bg")
+				bgcolor="g"
+				;;
+			"$cyan")
+				fgcolor="G"
+				;;
+			"$purple")
+				fgcolor="f"
+				;;
+			"$purple_bg"|"$lt_purple_bg")
+				bgcolor="f"
+				;;
+			"$lt_purple")
+				fgcolor="F"
+				;;
+			"$grey")
+				fgcolor="h"
+				;;
+			"$grey_bg")
+				bgcolor="h"
+				;;
+			# H (white) has no linux equivalent - how to use?
+			"$dk_grey")
+				fgcolor="A"
+				;;
+			"$black_bg"|"$dk_grey_bg")
+				bgcolor="a"
+				;;
+		esac
+		shift
+	done
+
+	if [ $reverse_color ]
+	then
+		oldbg=$bgcolor
+		bgcolor=$(echo $fgcolor | tr [:upper:] [:lower:])
+		if [ "$oldbg" == "x" ] || [ "$oldbg" == "a" ]
+		then
+			fgcolor="a"
+		else
+			fgcolor=$oldbg
+		fi
+	fi
+
+	echo -n "$fgcolor$bgcolor"
+}
+
+function convert_linux_to_bsd_color() {
+	_convert_linux_to_bsd_color $(echo $1 | sed -e 's/;/ /g')
+}
+
+export LSCOLORS="\
+$(convert_linux_to_bsd_color $DIR)\
+$(convert_linux_to_bsd_color $SYMLINK)\
+$(convert_linux_to_bsd_color $SOCKET)\
+$(convert_linux_to_bsd_color $PIPE)\
+$(convert_linux_to_bsd_color $EXECUTABLE)\
+$(convert_linux_to_bsd_color $BLOCKDEV)\
+$(convert_linux_to_bsd_color $CHARDEV)\
+$(convert_linux_to_bsd_color $SETUID)\
+$(convert_linux_to_bsd_color $SETGID)\
+$(convert_linux_to_bsd_color $STICKY_OTHER_WRITABLE)\
+$(convert_linux_to_bsd_color $OTHER_WRITABLE)\
+"
