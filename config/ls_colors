@@ -41,7 +41,7 @@ dk_grey_bg=100
 
 				NORMAL="$default"
 				  FILE="$default"
-				   DIR="$turquoise"
+				   DIR="$cyan"
 			   SYMLINK="$purple"
 				  PIPE="$reverse;$yellow"
 				SOCKET="$reverse;$purple"
