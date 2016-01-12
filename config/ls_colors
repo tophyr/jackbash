@@ -56,9 +56,6 @@ dk_grey_bg=100
 			EXECUTABLE="$green"
 MISSING_SYMLINK_TARGET=""
 				  DOOR=""
-			  LEFTCODE=""
-			 RIGHTCODE=""
-			   ENDCODE=""
 
 export LS_COLORS="\
 no=$NORMAL:\
@@ -78,9 +75,6 @@ ow=$OTHER_WRITABLE:\
 st=$STICKY:\
 ex=$EXECUTABLE:\
 mi=$MISSING_SYMLINK_TARGET:\
-lc=$LEFTCODE:\
-rc=$RIGHTCODE:\
-ec=$ENDCODE:\
 "
 
 function test_lscolors() {
