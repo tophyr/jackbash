@@ -14,8 +14,8 @@ green=32			# green
 lt_green=92			# bright green
 blue=34				# blue
 lt_blue=94			# bright blue
-turquoise=96		# cyan -- not great, looks darker cyan
-cyan=36				# bright cyan
+cyan=36				# cyan
+turquoise=96		# bright cyan
 purple=35			# magenta
 lt_purple=95		# bright magenta
 grey=37				# light grey
@@ -160,13 +160,13 @@ function _convert_linux_to_bsd_color() {
 			"$lt_blue")
 				fgcolor="E"
 				;;
-			"$turquoise")
+			"$cyan")
 				fgcolor="g"
 				;;
 			"$turquoise_bg"|"$cyan_bg")
 				bgcolor="g"
 				;;
-			"$cyan")
+			"$turquoise")
 				fgcolor="G"
 				;;
 			"$purple")

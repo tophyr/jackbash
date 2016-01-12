@@ -14,9 +14,6 @@ fi
 
 wrap_color -n "$LAST_ERR_COLOR" "["
 
-# (2) Git information really important for git users
-GIT_INFO='$(__git_ps1 "(%s) ")'
-
 # (3) Prompt color is red if I'm root
 PROMPT_COLOR=$MW
 if [ ${UID} -eq 0 ]; then
@@ -29,5 +26,9 @@ wrap_color -n "$N" ":"
 
 # (5) Color highlight out the current directory because it's important
 wrap_color -n "$MC" "\w"
+
+# (2) Git information really important for git users
+GIT_INFO='$(__git_ps1 " (%s) ")'
+echo -n "$GIT_INFO"
 
 wrap_color -n "$LAST_ERR_COLOR" "] "
