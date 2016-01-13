@@ -349,7 +349,7 @@ if [ -f "$PERHOST_FILE" ]; then
 fi;
 
 # remove duplicate path entries and preserve PATH order
-export PATH
+add_path /usr/local/bin
 PATH=$(echo "$PATH" | awk -F: '
 { start=0; for (i = 1; i <= NF; i++) if (!($i in arr) && $i) {if (start!=0) printf ":";start=1; printf "%s", $i;arr[$i]}; }
 END { printf "\n"; } ')
