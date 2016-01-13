@@ -105,8 +105,17 @@ export HISTFILESIZE=1000000000
 export HISTSIZE=1000000
 export PROMPT_COMMAND='history -a'
 export BROWSER='firefox'
-#export LANG='en_US.utf8'
-export LANG='C' # Testing: Try out the C locale
+#export LANG='C' # Testing: Try out the C locale
+
+export LANG="en_US.UTF-8"
+export LC_COLLATE="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
+export LC_MESSAGES="en_US.UTF-8"
+export LC_MONETARY="en_US.UTF-8"
+export LC_NUMERIC="en_US.UTF-8"
+export LC_TIME="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+
 if [ -f "$HOME/.inputrc" ]; then
   export INPUTRC="$HOME/.inputrc"
 fi;
