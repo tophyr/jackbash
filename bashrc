@@ -348,6 +348,17 @@ if [ -f "$PERHOST_FILE" ]; then
   source "$PERHOST_FILE"
 fi;
 
+# set JAVA_HOME
+case $(uname -s) in
+  "Darwin")
+    JAVA_HOME=$(/usr/libexec/java_home)
+    ;;
+  "Linux")
+    JAVA_HOME=$(readlink $(which javac) | sed "s:/bin/javac::")
+    ;;
+esac
+export JAVA_HOME
+
 # remove duplicate path entries and preserve PATH order
 add_path /usr/local/bin
 PATH=$(echo "$PATH" | awk -F: '
