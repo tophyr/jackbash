@@ -167,6 +167,9 @@ alias trim_whitespace="sed -i 's/[ \t]*$//' "
 alias sush='ssh -l root'
 alias http_headers='curl -svo /dev/null'
 
+alias moshd='mosh_wrapper dev8811.prn1.facebook.com'
+alias moshh='mosh_wrapper sarbs@imamotherfuckin.ninja'
+
 # Auto completion
 complete -cf sudo
 complete -cf which
