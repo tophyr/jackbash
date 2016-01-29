@@ -68,15 +68,15 @@ HOSTNAME_SCRUB=$(hostname | sed -e s/[^a-z0-9_]//g)
 
 # Global variables
 # Sometimes EDITOR require a complete path
-VIM_PATH=$(which vim)
+EDITOR_PATH=$(which nano)
 if [ $? -eq 0 ]; then
-  export EDITOR=$VIM_PATH
-  export SVN_EDITOR=$VIM_PATH
-  export GIT_EDITOR=$VIM_PATH
+  export EDITOR=$EDITOR_PATH
+  export SVN_EDITOR=$EDITOR_PATH
+  export GIT_EDITOR=$EDITOR_PATH
 fi
-LESS_PATH=$(which less)
+PAGER_PATH=$(which less)
 if [ $? -eq 0 ]; then
-  export PAGER=$LESS_PATH
+  export PAGER=$PAGER_PATH
 fi
 
 # export LS_COLORS="no=00:\
@@ -168,7 +168,9 @@ alias sush='ssh -l root'
 alias http_headers='curl -svo /dev/null'
 
 alias moshd='mosh_wrapper dev8811.prn1.facebook.com'
+alias sshd='ssh dev8811.prn1.facebook.com'
 alias moshh='mosh_wrapper sarbs@imamotherfuckin.ninja'
+alias sshh='ssh sarbs@imamotherfuckin.ninja'
 
 # Auto completion
 complete -cf sudo
@@ -364,6 +366,8 @@ export JAVA_HOME
 
 # remove duplicate path entries and preserve PATH order
 add_path /usr/local/bin
+add_path /usr/local/android/sdk/tools/
+add_path /usr/local/android/sdk/platform-tools/
 PATH=$(echo "$PATH" | awk -F: '
 { start=0; for (i = 1; i <= NF; i++) if (!($i in arr) && $i) {if (start!=0) printf ":";start=1; printf "%s", $i;arr[$i]}; }
 END { printf "\n"; } ')
