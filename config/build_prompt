@@ -28,7 +28,7 @@ wrap_color -n "$N" ":"
 wrap_color -n "$MC" "\w"
 
 # (2) Git information really important for git users
-GIT_INFO='$(__git_ps1 " (%s) ")'
-echo -n "$GIT_INFO"
+#GIT_INFO='$(__git_ps1 " (%s) ")'
+#echo -n "$GIT_INFO"
 
 wrap_color -n "$LAST_ERR_COLOR" "] "

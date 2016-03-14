@@ -4,8 +4,8 @@
 #
 # Welcome to the most awesome bash startup script you'll ever see.
 #   It tries to be BSD and GNU compatable, which means it works on
-#   your MAC, cygwin, and sandbox server.  It also tries to be safe 
-#   to add as a source to your .bashrc and .bash_profile.  I usually 
+#   your MAC, cygwin, and sandbox server.  It also tries to be safe
+#   to add as a source to your .bashrc and .bash_profile.  I usually
 #   source this file from both.
 #   It is split into three files
 #   (1) Generic bash stuff
@@ -282,7 +282,7 @@ function bz2 () {
   tar cvpjf "$1.tar.bz2" "$1"
 }
 
-function myip () { 
+function myip () {
  # GNU vs BSD hostname
  (hostname -i &> /dev/null)
   if [ $? -eq 0 ]; then
@@ -364,10 +364,15 @@ case $(uname -s) in
 esac
 export JAVA_HOME
 
+export ANDROID_HOME=/opt/android_sdk
+export ANDROID_SDK=$ANDROID_HOME
+export NDK_HOME=/opt/android_ndk/android-ndk-r10e
+
 # remove duplicate path entries and preserve PATH order
 add_path /usr/local/bin
-add_path /usr/local/android/sdk/tools/
-add_path /usr/local/android/sdk/platform-tools/
+add_path "${ANDROID_HOME}/tools"
+add_path "${ANDROID_HOME}/platform-tools"
+add_path "${ANDROID_HOME}/build-tools/23.0.1"
 PATH=$(echo "$PATH" | awk -F: '
 { start=0; for (i = 1; i <= NF; i++) if (!($i in arr) && $i) {if (start!=0) printf ":";start=1; printf "%s", $i;arr[$i]}; }
 END { printf "\n"; } ')
@@ -377,3 +382,7 @@ END { printf "\n"; } ')
 # The orginal version is saved in .bash_profile.pysave
 PATH="/Library/Frameworks/Python.framework/Versions/3.4/bin:${PATH}"
 export PATH
+
+function jargrep() {
+  find . -name "*.jar" -not -name "*.dex.jar" -type f -exec bash -c "jar tf {} 2>/dev/null | grep $1 && echo {}" \;
+}
