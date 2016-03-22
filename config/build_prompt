@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set up the prompt colors
-source "$HOME/.bash/config/term_colors"
+source "$HOME/bash/config/term_colors"
 
 if [ $LAST_ERR -ne 0 ]
 then 

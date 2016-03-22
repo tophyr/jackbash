@@ -2,7 +2,7 @@
 # A pretty looking git-svn-rebase that is way better than the default
 
 # TODO: Make this work for non-SVN repositories
-GROUP_VERSION="$HOME/.bash/group/bin/git-mybase"
+GROUP_VERSION="$HOME/bash/group/bin/git-mybase"
 if [ -f $GROUP_VERSION ]; then
   source $GROUP_VERSION
   exit

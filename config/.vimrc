@@ -29,8 +29,8 @@ syntax on
 map ; :CommandT<CR>
 
 " Source company specific vim settings
-if filereadable(glob("~/.bash/group/vimrc")) 
-  source ~/.bash/group/vimrc
+if filereadable(glob("~/bash/group/vimrc")) 
+  source ~/bash/group/vimrc
 endif
 " Allos recursive tags file searching
 set tags=tags;/
@@ -65,11 +65,11 @@ endif
 " https://github.com/apache/thrift/blob/master/contrib/thrift.vim
 au BufRead,BufNewFile *.thrift set filetype=thrift
 autocmd FileType thrift :setlocal sw=2 ts=2 sts=2
-au! Syntax thrift source ~/.bash/config/thrift.vim
+au! Syntax thrift source ~/bash/config/thrift.vim
 
 " http://protobuf.googlecode.com/svn-history/r28/trunk/editors/proto.vim
 augroup filetype
   au! BufRead,BufNewFile *.proto set filetype=proto
   autocmd FileType proto :setlocal sw=2 ts=2 sts=2
-  au! Syntax proto source ~/.bash/config/proto.vim
+  au! Syntax proto source ~/bash/config/proto.vim
 augroup end

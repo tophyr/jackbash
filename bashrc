@@ -50,7 +50,7 @@
 #   that code by executing:
 #  git clone git://github.com/cep21/jackbash.git
 #
-# The second is private.  You should make your own .git repository inside $HOME/.bash/group
+# The second is private.  You should make your own .git repository inside $HOME/bash/group
 #   Put private information there, like your email address or SSH keys
 #
 
@@ -96,7 +96,7 @@ fi
 # *.ogg=01;35:*.mp3=01;35:*.wav=01;35:\
 # ";
 
-source "$HOME/.bash/config/ls_colors"
+source "$HOME/bash/config/ls_colors"
 
 export GREP_OPTIONS='--color=auto'
 export GIT_CEILING_DIRECTORIES
@@ -167,8 +167,8 @@ alias trim_whitespace="sed -i 's/[ \t]*$//' "
 alias sush='ssh -l root'
 alias http_headers='curl -svo /dev/null'
 
-alias moshd='mosh_wrapper dev8811.prn1.facebook.com'
-alias sshd='ssh dev8811.prn1.facebook.com'
+alias moshd='mosh_wrapper devvm5995.prn1.facebook.com'
+alias sshd='ssh devvm5995.prn1.facebook.com'
 alias moshh='mosh_wrapper sarbs@imamotherfuckin.ninja'
 alias sshh='ssh sarbs@imamotherfuckin.ninja'
 
@@ -179,13 +179,13 @@ complete -cf which
 complete -W "$(echo `cat ~/.ssh/known_hosts 2> /dev/null | cut -f 1 -d ' ' | sed -e s/,.*//g | uniq | grep -v "\["`;)" ssh
 
 # Maven auto completion
-. ~/.bash/config/mvn_bash_completion.bash
+. ~/bash/config/mvn_bash_completion.bash
 
 # For _get_cword from https://code.google.com/p/bash-completion-lib/source/browse/trunk/include/_get_cword?spec=svn85&r=85
-. ~/.bash/config/get_cword.bash
+. ~/bash/config/get_cword.bash
 
 # golang auto completion from http://golang.org/misc/bash/go
-. ~/.bash/config/go-bash-completion.bash
+. ~/bash/config/go-bash-completion.bash
 
 # autocomplete man commands
 function listmans_raw() {
@@ -327,28 +327,28 @@ function psgrep(){
 function calc(){ ruby -e "puts $*"; }
 
 add_path "$HOME/bin"
-add_path "$HOME/.bash/bin"
-add_path "$HOME/.bash/group/bin"
+add_path "$HOME/bash/bin"
+add_path "$HOME/bash/group/bin"
 
 # Set up git completion
-source "$HOME/.bash/config/git-completion.bash"
-source "$HOME/.bash/config/git-prompt.sh"
+source "$HOME/bash/config/git-completion.bash"
+source "$HOME/bash/config/git-prompt.sh"
 
 ###### PROMPT ######
 
 function prompt_command() {
   # send in LAST_ERR explicitly as we're invoking a subshell where $? won't be the same value
-  export PS1=$(LAST_ERR=$? $HOME/.bash/config/build_prompt)
+  export PS1=$(LAST_ERR=$? $HOME/bash/config/build_prompt)
 }
 export PROMPT_COMMAND=prompt_command
 
 #### Source group
-GROUP_FILE="$HOME/.bash/group/group.bash"
+GROUP_FILE="$HOME/bash/group/group.bash"
 if [ -f "$GROUP_FILE" ]; then
   source "$GROUP_FILE"
 fi;
 ##### Source the correct per-host file
-PERHOST_FILE="$HOME/.bash/group/hostnames/$HOSTNAME_SCRUB.bash"
+PERHOST_FILE="$HOME/bash/group/hostnames/$HOSTNAME_SCRUB.bash"
 if [ -f "$PERHOST_FILE" ]; then
   source "$PERHOST_FILE"
 fi;
@@ -367,6 +367,7 @@ export JAVA_HOME
 export ANDROID_HOME=/opt/android_sdk
 export ANDROID_SDK=$ANDROID_HOME
 export NDK_HOME=/opt/android_ndk/android-ndk-r10e
+export HOMEBREW_GITHUB_API_TOKEN=5e0fa92d3c49709afdcbec753d2e6617e5274b3a
 
 # remove duplicate path entries and preserve PATH order
 add_path /usr/local/bin
