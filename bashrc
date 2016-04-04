@@ -68,11 +68,12 @@ HOSTNAME_SCRUB=$(hostname | sed -e s/[^a-z0-9_]//g)
 
 # Global variables
 # Sometimes EDITOR require a complete path
-EDITOR_PATH=$(which nano)
+EDITOR_PATH="/Users/csarbora/bin/subl -w"
 if [ $? -eq 0 ]; then
   export EDITOR=$EDITOR_PATH
   export SVN_EDITOR=$EDITOR_PATH
   export GIT_EDITOR=$EDITOR_PATH
+  export VISUAL=$EDITOR_PATH
 fi
 PAGER_PATH=$(which less)
 if [ $? -eq 0 ]; then
