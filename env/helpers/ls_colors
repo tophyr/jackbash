@@ -57,28 +57,8 @@ dk_grey_bg=100
 MISSING_SYMLINK_TARGET=""
 				  DOOR=""
 
-export LS_COLORS="\
-no=$NORMAL:\
-fi=$FILE:\
-di=$DIR:\
-ln=$SYMLINK:\
-pi=$PIPE:\
-do=$DOOR:\
-bd=$BLOCKDEV:\
-cd=$CHARDEV:\
-or=$DANGLING_SYMLINK:\
-so=$SOCKET:\
-su=$SETUID:\
-sg=$SETGID:\
-tw=$STICKY_OTHER_WRITABLE:\
-ow=$OTHER_WRITABLE:\
-st=$STICKY:\
-ex=$EXECUTABLE:\
-mi=$MISSING_SYMLINK_TARGET:\
-"
-
 function test_lscolors() {
-	mkdir -p ~/.tmp_test_colors 
+	mkdir -p ~/.tmp_test_colors
 	pushd ~/.tmp_test_colors
 
 	touch regular_file
@@ -214,7 +194,30 @@ function convert_linux_to_bsd_color() {
 	_convert_linux_to_bsd_color $(echo $1 | sed -e 's/;/ /g')
 }
 
-export LSCOLORS="\
+case $(uname -s) in
+	"Linux")
+		[ "$(basename $0)" == "LS_COLORS" ] && echo "\
+no=$NORMAL:\
+fi=$FILE:\
+di=$DIR:\
+ln=$SYMLINK:\
+pi=$PIPE:\
+do=$DOOR:\
+bd=$BLOCKDEV:\
+cd=$CHARDEV:\
+or=$DANGLING_SYMLINK:\
+so=$SOCKET:\
+su=$SETUID:\
+sg=$SETGID:\
+tw=$STICKY_OTHER_WRITABLE:\
+ow=$OTHER_WRITABLE:\
+st=$STICKY:\
+ex=$EXECUTABLE:\
+mi=$MISSING_SYMLINK_TARGET:\
+"
+		;;
+	"Darwin")
+		[ "$(basename $0)" == "LSCOLORS" ] && echo "\
 $(convert_linux_to_bsd_color $DIR)\
 $(convert_linux_to_bsd_color $SYMLINK)\
 $(convert_linux_to_bsd_color $SOCKET)\
@@ -227,3 +230,7 @@ $(convert_linux_to_bsd_color $SETGID)\
 $(convert_linux_to_bsd_color $STICKY_OTHER_WRITABLE)\
 $(convert_linux_to_bsd_color $OTHER_WRITABLE)\
 "
+		;;
+	*)
+		false # exit with a failure code to prevent setting var
+esac

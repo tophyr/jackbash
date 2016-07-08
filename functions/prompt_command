@@ -1,0 +1,5 @@
+#!/bin/bash
+function prompt_command() {
+  # send in LAST_ERR explicitly as we're invoking a subshell where $? won't be the same value
+  export PS1=$(LAST_ERR=$? build_prompt)
+}

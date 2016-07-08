@@ -1,0 +1,37 @@
+#!/bin/bash
+function termcolor() {
+	case $1 in
+		'N') echo -n "\[\033[0m\]";;    # unsets color to terms fg color
+
+		# regular colors
+		'K') echo -n "\[\033[0;30m\]";;    # black
+		'R') echo -n "\[\033[0;31m\]";;    # red
+		'G') echo -n "\[\033[0;32m\]";;    # green
+		'Y') echo -n "\[\033[0;33m\]";;    # yellow
+		'B') echo -n "\[\033[0;34m\]";;    # blue
+		'M') echo -n "\[\033[0;35m\]";;    # magenta
+		'C') echo -n "\[\033[0;36m\]";;    # cyan
+		'W') echo -n "\[\033[0;37m\]";;    # white
+
+		# empahsized (bolded) colors
+		'MK') echo -n "\[\033[1;30m\]";;
+		'MR') echo -n "\[\033[1;31m\]";;
+		'MG') echo -n "\[\033[1;32m\]";;
+		'MY') echo -n "\[\033[1;33m\]";;
+		'MB') echo -n "\[\033[1;34m\]";;
+		'MM') echo -n "\[\033[1;35m\]";;
+		'MC') echo -n "\[\033[1;36m\]";;
+		'MW') echo -n "\[\033[1;37m\]";;
+
+		# background colors
+		'BGK') echo -n "\[\033[40m\]";;
+		'BGR') echo -n "\[\033[41m\]";;
+		'BGG') echo -n "\[\033[42m\]";;
+		'BGY') echo -n "\[\033[43m\]";;
+		'BGB') echo -n "\[\033[44m\]";;
+		'BGM') echo -n "\[\033[45m\]";;
+		'BGC') echo -n "\[\033[46m\]";;
+		'BGW') echo -n "\[\033[47m\]";;
+		*) echo Bad termcolor: $1 >&2; false;;
+	esac
+}

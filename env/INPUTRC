@@ -1,0 +1,4 @@
+#!/bin/bash
+require_var $HOME
+
+[ -f "$HOME/.inputrc" ] && echo "$HOME/.inputrc"

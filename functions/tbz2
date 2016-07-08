@@ -1,0 +1,4 @@
+# Compress with tar + bzip2
+function tbz2 () {
+  tar cvpjf "$1.tar.bz2" "$1"
+}

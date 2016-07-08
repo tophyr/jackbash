@@ -1,0 +1,6 @@
+# Simple blowfish decryption
+function fish()
+{
+    [ -z "$1" -o -z "$2" ] && echo 'Decrypt: fish INFILE OUTFILE' && return 1
+    openssl bf-cbc -d -salt -in "$1" -out "$2"
+}

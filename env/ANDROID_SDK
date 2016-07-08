@@ -1,0 +1,3 @@
+#!/bin/bash
+require_var $ANDROID_HOME
+echo $ANDROID_HOME

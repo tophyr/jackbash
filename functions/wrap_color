@@ -1,0 +1,21 @@
+#!/bin/bash
+# takes: $1 - color
+#		 $2 - text to wrap
+function wrap_color() {
+	if [ "$1" == "-n" ]
+	then
+		echo_newline=
+		shift
+	else
+		echo_newline=1
+	fi
+
+	termcolor $1
+	echo -n "$2"
+	termcolor N
+
+	if [ $echo_newline ]
+	then
+		echo
+	fi
+}

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+for completion in "$BASHRCDIR"/completions/*; do
+    if [ -f "$completion" ]; then
+        source "$completion"
+    else
+        echo "WARN: $completion not a valid completion definition file"
+    fi
+done
+unset completion

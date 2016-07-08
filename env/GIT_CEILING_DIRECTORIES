@@ -1,0 +1,3 @@
+#!/bin/bash
+require_var $HOME
+echo $HOME | sed 's#/[^/]*$##'

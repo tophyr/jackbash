@@ -1,0 +1,9 @@
+#!/bin/bash
+case $(uname -s) in
+  "Darwin")
+    /usr/libexec/java_home
+    ;;
+  "Linux")
+    readlink $(which javac) | sed "s:/bin/javac::"
+    ;;
+esac

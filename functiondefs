@@ -1,0 +1,10 @@
+#!/bin/bash
+
+for func in "$BASHRCDIR"/functions/*; do
+    if [ -f "$func" ]; then
+        source "$func"
+    else
+        echo "WARN: $func not a valid function definition file"
+    fi
+done
+unset func

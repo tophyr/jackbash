@@ -1,0 +1,26 @@
+#!/bin/bash
+
+require_var $ANDROID_HOME
+require_var $HOME
+require_var $PATH
+
+function add_path() { PATH="$PATH:$1"; }
+function add_pre_path() { PATH="$1:$PATH"; }
+
+add_path /usr/local/bin
+add_path "${ANDROID_HOME}/tools"
+add_path "${ANDROID_HOME}/platform-tools"
+add_path "${ANDROID_HOME}/build-tools/23.0.1"
+
+add_path "/Library/Frameworks/Python.framework/Versions/3.4/bin"
+
+
+add_pre_path "$HOME/bin"
+add_pre_path "$HOME/bash/bin"
+add_pre_path "$HOME/bash/group/bin"
+
+PATH=$(echo "$PATH" | awk -F: '
+{ start=0; for (i = 1; i <= NF; i++) if (!($i in arr) && $i) {if (start!=0) printf ":";start=1; printf "%s", $i;arr[$i]}; }
+END { printf "\n"; } ')
+
+echo $PATH

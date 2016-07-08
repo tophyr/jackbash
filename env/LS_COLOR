@@ -1,0 +1,8 @@
+#!/bin/bash
+# GNU vs BSD ls for color
+(ls --color=tty &> /dev/null)
+if [ $? -eq 0 ]; then
+  echo '--color=tty'
+else
+  echo '-G'
+fi;

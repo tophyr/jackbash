@@ -1,0 +1,13 @@
+#!/bin/bash
+
+for aliasfile in "$BASHRCDIR"/aliases/*; do
+    if [ -f "$aliasfile" ]; then
+        alias $(basename $aliasfile)="$(cat $aliasfile)"
+    else
+        echo "WARN: $aliasfile not a valid alias definition file"
+    fi
+done
+unset aliasfile
+
+# special case
+alias ..='cd ..'

@@ -1,0 +1,3 @@
+function jargrep() {
+  find . -name "*.jar" -not -name "*.dex.jar" -type f -exec bash -c "jar tf {} 2>/dev/null | grep $1 && echo {}" \;
+}

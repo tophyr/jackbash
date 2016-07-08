@@ -1,0 +1,32 @@
+#!/bin/bash
+function build_prompt() {
+	if [ $LAST_ERR -ne 0 ]
+	then
+		LAST_ERR_COLOR=R
+	else
+		LAST_ERR_COLOR=N
+	fi
+
+	# I like this prompt for a few reasons:
+
+	wrap_color -n "$LAST_ERR_COLOR" "["
+
+	# (3) Prompt color is red if I'm root
+	PROMPT_COLOR=MW
+	if [ ${UID} -eq 0 ]; then
+	  PROMPT_COLOR=R
+	fi
+	wrap_color -n "$PROMPT_COLOR" "\u@\H"
+
+	# (4) The last part of the prompt can copy/paste directly into an SCP command
+	wrap_color -n N ":"
+
+	# (5) Color highlight out the current directory because it's important
+	wrap_color -n MC "\w"
+
+	# (2) Git information really important for git users
+	#GIT_INFO='$(__git_ps1 " (%s) ")'
+	#echo -n "$GIT_INFO"
+
+	wrap_color -n "$LAST_ERR_COLOR" "] "
+}

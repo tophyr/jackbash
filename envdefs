@@ -1,0 +1,43 @@
+#!/bin/bash
+
+function require_var() {
+    [ ! -z ${@+x} ] || exit 64
+}
+export -f require_var
+
+files=("$BASHRCDIR"/env/*)
+while [ ${#files[@]} -gt 0 ]; do
+    newfiles=()
+    for varfile in ${files[@]}; do
+        [ -f "$varfile" ] || continue
+        var=$(basename "$varfile")
+        if [ -x "$varfile" ]; then
+            tmp="$("$varfile")"
+            ret=$?
+            if [ $ret -ne 0 ]; then
+                if [ $ret -eq 64 ]; then
+                    newfiles+=("$varfile")
+                fi
+                continue
+            fi
+            declare $var="$tmp"
+        else
+            declare $var="$(cat "$varfile")"
+        fi
+        export $var
+    done
+    if [ "${files[*]}" == "${newfiles[*]}" ]; then
+        echo ERR: Unrecoverable env var loop. Remaining todo:
+        echo ${newfiles[*]}
+        break
+    fi
+
+    files=("${newfiles[@]}")
+done
+
+unset files
+unset newfiles
+unset require_var
+unset varfile
+unset tmp
+unset ret
