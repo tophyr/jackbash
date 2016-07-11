@@ -1,3 +1,0 @@
-#!/bin/bash
-require_var $EDITOR_PATH
-echo $EDITOR_PATH

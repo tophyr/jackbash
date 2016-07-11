@@ -5,39 +5,60 @@ function require_var() {
 }
 export -f require_var
 
-files=("$BASHRCDIR"/env/*)
-while [ ${#files[@]} -gt 0 ]; do
-    newfiles=()
-    for varfile in ${files[@]}; do
-        [ -f "$varfile" ] || continue
-        var=$(basename "$varfile")
-        if [ -x "$varfile" ]; then
-            tmp="$("$varfile")"
-            ret=$?
-            if [ $ret -ne 0 ]; then
-                if [ $ret -eq 64 ]; then
-                    newfiles+=("$varfile")
-                fi
-                continue
-            fi
-            declare $var="$tmp"
-        else
-            declare $var="$(cat "$varfile")"
+vars=()
+
+function add_var() { vars+=($(basename "$1")); }
+settings_iter env process_settingsdir add_var 2>/dev/null
+
+IFS=$'\n'; vars=($(sort <<<"${vars[*]}" | uniq)); unset IFS
+
+function slurp_static() { eval "$1='$(cat "$2")'"; }
+function slurp_dynamic() {
+    local value
+    value="$("$2")"
+    local ret=$?
+    if [ $ret -ne 0 ]; then
+        if [ $ret -eq 64 ]; then
+            newvars+=("$1")
         fi
+        continue 2
+    fi
+    eval "$1='$value'"
+}
+function slurp_var() {
+    local var=$2
+    local varfile="$1"/$var
+    [ -f "$varfile" ] || continue
+
+    if [ -x "$varfile" ]; then
+        slurp_dynamic $var "$varfile"
+    else
+        slurp_static $var "$varfile"
+    fi
+}
+
+while [ ${#vars[@]} -gt 0 ]; do
+    newvars=()
+
+    for var in ${vars[@]}; do
+        settings_iter env slurp_var $var
+
         export $var
     done
-    if [ "${files[*]}" == "${newfiles[*]}" ]; then
+
+
+    if [ "${vars[*]}" == "${newvars[*]}" ]; then
         echo ERR: Unrecoverable env var loop. Remaining todo:
-        echo ${newfiles[*]}
+        echo ${newvars[*]}
         break
     fi
-
-    files=("${newfiles[@]}")
+    vars=("${newvars[@]}")
 done
 
-unset files
-unset newfiles
 unset require_var
-unset varfile
-unset tmp
-unset ret
+unset vars
+unset slurp_static
+unset slurp_dynamic
+unset slurp_var
+unset var
+unset newvars

@@ -1,6 +1,0 @@
-#Simple blowfish encryption
-function blow()
-{
-    [ -z "$1" ] && echo 'Encrypt: blow FILE' && return 1
-    openssl bf-cbc -salt -in "$1" -out "$1.bf"
-}

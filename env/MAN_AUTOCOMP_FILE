@@ -1,3 +1,0 @@
-#!/bin/bash
-echo -n /tmp/man_completes_
-whoami
