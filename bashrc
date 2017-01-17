@@ -19,23 +19,24 @@ function process_settingsdir() {
     local file
     for file in "$dir"/*; do
         if [ -f "$file" ]; then
-            $func "$file"
+            echo $func "$file"
+            { time $func "$file"; } 2>&1
         else
             echo "WARN: $file not a valid $func definition file" >&2
         fi
     done
 }
 
+{
+  function load_alias() { alias $(basename $1)="$(cat $1)"; }
+  settings_iter aliases process_settingsdir load_alias
 
-function load_alias() { alias $(basename $1)="$(cat $1)"; }
-settings_iter aliases process_settingsdir load_alias
+  settings_iter functions process_settingsdir source
 
-settings_iter functions process_settingsdir source
+  source "$BASHRCDIR/envdefs"
 
-source "$BASHRCDIR/envdefs"
-
-settings_iter completions process_settingsdir source
-
+  settings_iter completions process_settingsdir source
+} > "$BASHRCDIR"/timing.log
 
 
 unset settings_iter
